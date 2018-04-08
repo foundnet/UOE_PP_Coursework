@@ -86,33 +86,18 @@ void evolve(int count, double dt)
         }
       }
     }
-
-    /* calculate norm of seperation vector */
-    for (k = 0; k < Npair; k++)
-    {
-      delta_r[k] = 0.0;
-    }
-    for (i = 0; i < Ndim; i++)
-    {
-      add_norm(Npair, delta_r, delta_pos[i]);
-    }
-    for (k = 0; k < Npair; k++)
-    {
-      delta_r[k] = sqrt(delta_r[k]);
-    }
-
-    /*
+   /*
  * add pairwise forces.
  */
-    int collis[Nbody][Nbody] = {0};
-    for (l = 0; l < Ndim; l++)
+    k = 0;
+    for (i = 0; i < Nbody; i++)
     {
-      k = 0;
-      for (i = 0; i < Nbody; i++)
+      for (j = i + 1; j < Nbody; j++)
       {
-        for (j = i + 1; j < Nbody; j++)
+        Size = radius[i] + radius[j];
+        collided = 0;
+        for (l = 0; l < Ndim; l++)
         {
-          Size = radius[i] + radius[j];
           /*  flip force if close in */
           if (delta_r[k] >= Size)
           {
@@ -127,15 +112,14 @@ void evolve(int count, double dt)
                       force(G * mass[i] * mass[j], delta_pos[l][k], delta_r[k]);
             f[l][j] = f[l][j] -
                       force(G * mass[i] * mass[j], delta_pos[l][k], delta_r[k]);
-            collis[i][j] = 1;
+            collided = 1;
           }
-
-          if ((l == Ndim - 1) && (collis[i][j] = 1))
-          {
-            collisions++;
-          }
-          k = k + 1;
         }
+        if (collided == 1)
+        {
+          collisions++;
+        }
+        k = k + 1;
       }
     }
 
