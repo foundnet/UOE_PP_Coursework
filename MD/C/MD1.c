@@ -104,15 +104,18 @@ void evolve(int count, double dt)
     /*
  * add pairwise forces.
  */
-    k = 0;
-    for (i = 0; i < Nbody; i++)
-    {
-      for (j = i + 1; j < Nbody; j++)
+
+    int collis[Nbody][Nbody] = {0};
+    for (l = 0; l < Ndim; l++)
+    {   
+      k = 0;
+      for (i = 0; i < Nbody; i++)
       {
-        Size = radius[i] + radius[j];
-        collided = 0;
-        for (l = 0; l < Ndim; l++)
+        for (j = i + 1; j < Nbody; j++)
         {
+          Size = radius[i] + radius[j];
+          collided = 0;
+
           /*  flip force if close in */
           if (delta_r[k] >= Size)
           {
@@ -127,15 +130,18 @@ void evolve(int count, double dt)
                       force(G * mass[i] * mass[j], delta_pos[l][k], delta_r[k]);
             f[l][j] = f[l][j] -
                       force(G * mass[i] * mass[j], delta_pos[l][k], delta_r[k]);
-            collided = 1;
+            collis[i][j] = 1;
           }
+          if ((l==Ndim-1) && collis[i][j] == 1)
+          {
+            collisions++;
+          }
+          k = k + 1;
+
         }
-        if (collided == 1)
-        {
-          collisions++;
-        }
-        k = k + 1;
+
       }
+      
     }
 
     /* update positions */
