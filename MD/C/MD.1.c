@@ -64,29 +64,43 @@ void evolve(int count, double dt)
       r[k] = sqrt(r[k]);
     }
     /* calculate central force */
-   
-    for (l = 0; l < Ndim; l++)
+    for (i = 0; i < Nbody; i++)
     {
-      for (i = 0; i < Nbody; i++)
+      for (l = 0; l < Ndim; l++)
       {
         f[l][i] = f[l][i] -
-             force(G * mass[i] * M_central, pos[l][i], r[i]);
+                  force(G * mass[i] * M_central, pos[l][i], r[i]);
       }
     }
     /* calculate pairwise separation of particles */
-    for (l = 0; l < Ndim; l++)
+    k = 0;
+    for (i = 0; i < Nbody; i++)
     {
-      k = 0;
-      for (i = 0; i < Nbody; i++)
+      for (j = i + 1; j < Nbody; j++)
       {
-        for (j = i + 1; j < Nbody; j++)
+        for (l = 0; l < Ndim; l++)
         {
           delta_pos[l][k] = pos[l][i] - pos[l][j];
-          k = k + 1;
         }
+        k = k + 1;
       }
     }
-   /*
+
+    /* calculate norm of seperation vector */
+    for (k = 0; k < Npair; k++)
+    {
+      delta_r[k] = 0.0;
+    }
+    for (i = 0; i < Ndim; i++)
+    {
+      add_norm(Npair, delta_r, delta_pos[i]);
+    }
+    for (k = 0; k < Npair; k++)
+    {
+      delta_r[k] = sqrt(delta_r[k]);
+    }
+
+    /*
  * add pairwise forces.
  */
     k = 0;
@@ -124,19 +138,18 @@ void evolve(int count, double dt)
     }
 
     /* update positions */
-    for (j = 0; j < Ndim; j++)
+    for (i = 0; i < Nbody; i++)
     {
-      for (i = 0; i < Nbody; i++)
+      for (j = 0; j < Ndim; j++)
       {
-
         pos[j][i] = pos[j][i] + dt * velo[j][i];
       }
     }
 
     /* update velocities */
-    for (j = 0; j < Ndim; j++)
+    for (i = 0; i < Nbody; i++)
     {
-      for (i = 0; i < Nbody; i++)
+      for (j = 0; j < Ndim; j++)
       {
         velo[j][i] = velo[j][i] + dt * (f[j][i] / mass[i]);
       }
