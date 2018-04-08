@@ -64,10 +64,11 @@ void evolve(int count, double dt)
       r[k] = sqrt(r[k]);
     }
     /* calculate central force */
-    for (i = 0; i < Nbody; i++)
+    for (l = 0; l < Ndim; l++)
     {
-      for (l = 0; l < Ndim; l++)
+      for (i = 0; i < Nbody; i++)
       {
+
         f[l][i] = f[l][i] -
                   force(G * mass[i] * M_central, pos[l][i], r[i]);
       }
@@ -138,18 +139,19 @@ void evolve(int count, double dt)
     }
 
     /* update positions */
-    for (i = 0; i < Nbody; i++)
+    for (j = 0; j < Ndim; j++)
     {
-      for (j = 0; j < Ndim; j++)
+      for (i = 0; i < Nbody; i++)
       {
+
         pos[j][i] = pos[j][i] + dt * velo[j][i];
       }
     }
 
     /* update velocities */
-    for (i = 0; i < Nbody; i++)
+    for (j = 0; j < Ndim; j++)
     {
-      for (j = 0; j < Ndim; j++)
+      for (i = 0; i < Nbody; i++)
       {
         velo[j][i] = velo[j][i] + dt * (f[j][i] / mass[i]);
       }
