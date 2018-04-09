@@ -49,6 +49,7 @@ void evolve(int count, double dt)
         if (j == 0) r[i] = 0.0;
         r[i] += (pos[j][i] * pos[j][i]);
         if (j == Ndim-1) r[i] = sqrt(r[i]);
+        
       }
     }
 
