@@ -48,8 +48,12 @@ void evolve(int count, double dt)
         f[j][i] = -vis[i] * (velo[j][i] + wind[j]); 
         if (j == 0) r[i] = 0.0;
         r[i] += (pos[j][i] * pos[j][i]);
-        if (j == Ndim-1) r[i] = sqrt(r[i]);
-        
+        if (j == Ndim-1) 
+        {
+          double count = r[i];
+          r[i] = sqrt(r[i]);
+          r_pow[i] = count * r[i];
+        }      
       }
     }
 
@@ -58,7 +62,7 @@ void evolve(int count, double dt)
       for (i = 0; i < Nbody; i++)
       {
         f[l][i] = f[l][i] -
-                  G * mass[i] * M_central * pos[l][i] / pow(r[i],3.0);
+                  G * mass[i] * M_central * pos[l][i] / r_row[i];
       }
     }
 
@@ -76,22 +80,24 @@ void evolve(int count, double dt)
       }
     }
 
+  double total;
+
     for (i = 0; i < Ndim; i++)
     {
       for ( k = 0; k < Npair; k++)
       {
         if (i == 0)
-          delta_r[k] = 0.0;
+            delta_r[k] = 0.0;
         delta_r[k] += (delta_pos[i][k] * delta_pos[i][k]);
         if (i == Ndim - 1)
         {
-          double total = delta_r[k].
+           total = delta_r[k].
            delta_r[k] = sqrt(delta_r[k]);
            delta_r_pow[k] = total * delta_r[k] ;
         }
       }
     }
-
+  
     /*
  * add pairwise forces.
  */
