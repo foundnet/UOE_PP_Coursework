@@ -35,7 +35,12 @@ int main(int argc, char *argv[])
   wind[Zcoord] = 0.0;
   /* set up multi dimensional arrays */
   r = calloc(Nbody, sizeof(double));
+
+  r_row = calloc(Nbody, sizeof(double));
+ 
+
   delta_r = calloc(Nbody * Nbody, sizeof(double));
+  delta_r_show = calloc(Nbody * Nbody, sizeof(double));
   mass = calloc(Nbody, sizeof(double));
   radius = calloc(Nbody, sizeof(double));
   vis = calloc(Nbody, sizeof(double));
