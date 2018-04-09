@@ -43,14 +43,13 @@ void evolve(int count, double dt)
     /* Optimization 2 */
     for (j = 0; j < Ndim; j++)
     {
-        forint (i=0;i<Nbody;i++)
-        {
-            f[j][i] = -vis[i] * (velo[j][i] + wind[j])
-                  - G * mass[i] * M_central * pos[j][i] / pow(r[i],3.0);
+      for (int i = 0; i < Nbody; i++)
+      {
+        f[j][i] = -vis[i] * (velo[j][i] + wind[j]) - G * mass[i] * M_central * pos[j][i] / pow(r[i], 3.0);
             if (j == 0] r[i] = 0.0;
             r[i] += (pos[j][i] * pos[j][i]);
             if (j == Ndim-1) r[i] = sqrt(r[i]);
-        }
+      }
     }
 
     /* calculate pairwise separation of particles */
@@ -67,15 +66,16 @@ void evolve(int count, double dt)
       }
     }
 
-
     for (i = 0; i < Ndim; i++)
     {
-        for(int k=0; k<Npair; k++)
-        {
-          if (i==0)         delta_r[k] = 0.0;
-          delta_r[k] += (delta_pos[i][k] * delta_pos[i][k]);
-          if (i == Ndim-1)     delta_r[k] = sqrt(delta_r[k]);
-        }
+      for (int k = 0; k < Npair; k++)
+      {
+        if (i == 0)
+          delta_r[k] = 0.0;
+        delta_r[k] += (delta_pos[i][k] * delta_pos[i][k]);
+        if (i == Ndim - 1)
+          delta_r[k] = sqrt(delta_r[k]);
+      }
     }
 
     /*
@@ -83,7 +83,7 @@ void evolve(int count, double dt)
  */
     int collis[Nbody][Nbody] = {0};
     for (l = 0; l < Ndim; l++)
-    {   
+    {
       k = 0;
       for (i = 0; i < Nbody; i++)
       {
@@ -96,27 +96,25 @@ void evolve(int count, double dt)
           if (delta_r[k] >= Size)
           {
             f[l][i] = f[l][i] -
-                      G * mass[i] * mass[j] * delta_pos[l][k] / pow(delta_r[k],3.0);
+                      G * mass[i] * mass[j] * delta_pos[l][k] / pow(delta_r[k], 3.0);
             f[l][j] = f[l][j] +
-                      G * mass[i] * mass[j] * delta_pos[l][k] / pow(delta_r[k],3.0);
+                      G * mass[i] * mass[j] * delta_pos[l][k] / pow(delta_r[k], 3.0);
           }
           else
           {
             f[l][i] = f[l][i] +
-                      G * mass[i] * mass[j] * delta_pos[l][k] / pow(delta_r[k],3.0);
+                      G * mass[i] * mass[j] * delta_pos[l][k] / pow(delta_r[k], 3.0);
             f[l][j] = f[l][j] -
-                      G * mass[i] * mass[j] * delta_pos[l][k] / pow(delta_r[k],3.0);
+                      G * mass[i] * mass[j] * delta_pos[l][k] / pow(delta_r[k], 3.0);
             collis[i][j] = 1;
           }
-          if ((l==Ndim-1) && collis[i][j] == 1)
+          if ((l == Ndim - 1) && collis[i][j] == 1)
           {
             collisions++;
           }
           k = k + 1;
         }
-
       }
-      
     }
 
     /* update positions */
@@ -128,4 +126,5 @@ void evolve(int count, double dt)
         velo[j][i] = velo[j][i] + dt * (f[j][i] / mass[i]);
       }
     }
-
+  }
+}
