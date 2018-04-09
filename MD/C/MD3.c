@@ -62,7 +62,7 @@ void evolve(int count, double dt)
       for (i = 0; i < Nbody; i++)
       {
         f[l][i] = f[l][i] -
-                  G * mass[i] * M_central * pos[l][i] / r_row[i];
+                  G * mass[i] * M_central * pos[l][i] / r_pow[i];
       }
     }
 
@@ -91,7 +91,7 @@ void evolve(int count, double dt)
         delta_r[k] += (delta_pos[i][k] * delta_pos[i][k]);
         if (i == Ndim - 1)
         {
-           total = delta_r[k].
+           total = delta_r[k];
            delta_r[k] = sqrt(delta_r[k]);
            delta_r_pow[k] = total * delta_r[k] ;
         }
@@ -99,7 +99,7 @@ void evolve(int count, double dt)
     }
   
 
-  
+
     /*
  * add pairwise forces.
  */
