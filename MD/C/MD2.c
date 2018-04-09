@@ -43,12 +43,22 @@ void evolve(int count, double dt)
     /* Optimization 2 */
     for (j = 0; j < Ndim; j++)
     {
-      for (int i = 0; i < Nbody; i++)
+      for (i = 0; i < Nbody; i++)
       {
-        f[j][i] = -vis[i] * (velo[j][i] + wind[j]) - G * mass[i] * M_central * pos[j][i] / pow(r[i], 3.0);
-            if (j == 0] r[i] = 0.0;
-            r[i] += (pos[j][i] * pos[j][i]);
-            if (j == Ndim-1) r[i] = sqrt(r[i]);
+        f[j][i] = -vis[i] * (velo[j][i] + wind[j]); 
+        if (j == 0) r[i] = 0.0;
+        r[i] += (pos[j][i] * pos[j][i]);
+        if (j == Ndim-1) r[i] = sqrt(r[i]);
+      }
+    }
+
+    for (l = 0; l < Ndim; l++)
+    {
+      for (i = 0; i < Nbody; i++)
+      {
+
+        f[l][i] = f[l][i] -
+                  G * mass[i] * M_central * pos[l][i] / pow(r[i]),3.0);
       }
     }
 
