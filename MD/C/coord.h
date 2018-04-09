@@ -28,7 +28,11 @@ DEF double *pos[Ndim], *velo[Ndim];
 DEF double *f[Ndim], *vis, *mass, *radius;
 DEF double *delta_pos[3];
 DEF double *r;
+DEF double *r_pow;
+
 DEF double *delta_r;
+DEF double *delta_r_pow;
+
 DEF double wind[Ndim];
 DEF int collisions;
 
