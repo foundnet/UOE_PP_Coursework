@@ -59,7 +59,7 @@ void evolve(int count, double dt)
       {
 
         f[l][i] = f[l][i] -
-                  G * mass[i] * M_central * pos[l][i] / pow(r[i]),3.0);
+                  G * mass[i] * M_central * pos[l][i] / pow(r[i],3.0);
       }
     }
 
@@ -79,7 +79,7 @@ void evolve(int count, double dt)
 
     for (i = 0; i < Ndim; i++)
     {
-      for (int k = 0; k < Npair; k++)
+      for ( k = 0; k < Npair; k++)
       {
         if (i == 0)
           delta_r[k] = 0.0;
